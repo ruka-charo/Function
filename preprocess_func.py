@@ -5,6 +5,23 @@ import category_encoders as ce
 from sklearn.model_selection import KFold
 
 
+'''Label or OneHot'''
+def encoding(encode_type, X_train, X_test, category_features):
+    # エンコードのタイプを決定
+    if encode_type == 'label':
+        oe = ce.OrdinalEncoder(cols=category_features)
+    elif encode_type == 'onehot':
+        oe = ce.OneHotEncoder(cols=category_features)
+
+    # 訓練データとテストデータを結合する
+    mix_df = pd.concat([X_train, X_test])
+    # 変換
+    mix_tra = oe.fit_transform(mix_df)
+    # データの分割
+    X_train, X_test = mix_df[:X_train.shape[0]], mix_df[X_train.shape[0]:]
+
+    return X_train, X_test
+
 
 '''Target Encoding'''
 def target_encoding(cat_cols, train_x, train_y, test_x, n_splits=4, random_state=1):
@@ -73,7 +90,7 @@ def k_target_encoding(cat_cols, train_x, train_y, test_x, val_split=4, n_splits=
     return tr_x, va_x, tr_y, va_y # このままでは使えないがメモ
 
 
-'''lightgbm 変数重要度の可視化'''
+'''lightgbm(sklearnAPI) 変数重要度の可視化'''
 def lgb_importance(X_train, lgb_model):
     features = X_train.columns
     importances = lgb_model.feature_importances_
