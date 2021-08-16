@@ -20,9 +20,9 @@ def encoding(encode_type, X_train, X_test, category_features):
     # 変換
     mix_tra = oe.fit_transform(mix_df)
     # データの分割
-    X_train, X_test = mix_df[:X_train.shape[0]], mix_df[X_train.shape[0]:]
+    X_train_en, X_test_en = mix_tra[:X_train.shape[0]], mix_tra[X_train.shape[0]:]
 
-    return X_train, X_test
+    return X_train_en, X_test_en
 
 
 # lightgbm(sklearnAPI) 変数重要度の可視化
