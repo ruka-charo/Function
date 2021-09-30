@@ -25,11 +25,23 @@ def encoding(encode_type, X_train, X_test, category_features):
     return X_train_en, X_test_en
 
 
-# lightgbm(sklearnAPI) 変数重要度の可視化
-def lgb_importance(X_train, lgb_model):
+# RandomForest, lightgbm(sklearnAPI) 変数重要度の可視化
+def models_importance(X_train, model):
     features = X_train.columns
-    importances = lgb_model.feature_importances_
+    importances = model.feature_importances_
     indices = np.argsort(-importances)
     plt.bar(np.array(features)[indices], np.array(importances[indices]))
     plt.xticks(rotation=90)
+    plt.xlabel('features')
+    plt.ylabel('importance')
+    plt.title('Features Importance')
     plt.show()
+
+
+# 提出用データフレーム作成
+def answer_csv(y_pred, id):
+    pred_df = pd.DataFrame(y_pred)
+    ans = pd.DataFrame(id)
+    ans = ans.merge(pred_df, right_index=True, left_index=True)
+
+    return ans
